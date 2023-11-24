@@ -1,0 +1,33 @@
+body {
+    background-color: beige;
+}
+
+.no-wrap {
+    white-space: nowrap;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: #FFD700; /* Жовтий фон заголовків */
+}
+
+tr:nth-child(even) {
+    background-color: #F5F5F5; /* Світло-сірий фон для парних рядків */
+}
+
+tr:nth-child(odd) {
+    background-color: #E0E0E0; /* Темно-сірий фон для непарних рядків */
+}
+
+.no-wrap b {
+    color: #8B4513; /* Колір тексту для ролей, наприклад, коричневий */
+}

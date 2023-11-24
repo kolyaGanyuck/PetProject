@@ -1,0 +1,40 @@
+.product {
+    margin: 10px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: #f7f7f7;
+}
+
+.product a {
+    text-decoration: none;
+}
+
+.product a:hover {
+    text-decoration: underline;
+}
+
+.product span {
+    display: block;
+    font-size: 1.2rem;
+}
+
+.product span:first-child {
+    font-weight: bold;
+}
+
+.product span:last-child {
+    color: #0077b6; /* Колір ціни */
+}
+
+.product a {
+    display: inline-block;
+    background-color: #00587a; /* Колір фону кнопки */
+    color: #fff; /* Колір тексту кнопки */
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.product a:hover {
+    background-color: #0077b6; /* Колір фону кнопки при наведенні */
+}

@@ -1,0 +1,81 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.form-container {
+    background-color: #cccccc;
+    padding: 30px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    width: 400px; /* Adjust the width as per your preference */
+}
+
+body {
+    background-color: beige;
+}
+
+h2 {
+    text-align: center;
+    color: #5e057e;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #5e057e;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="text"],
+input[type="password"] {
+    width: 95%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-weight: bold;
+}
+
+button[type="submit"] {
+    background-color: #5e057e;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+}
+
+button[type="submit"]:hover {
+    background-color: #c299d0;
+}
+
+.error-message, .logout-message {
+    display: block;
+    border: 1px solid black;
+    font-size: 18px;
+    color: black;
+    padding: 10px;
+    border-radius: 3px;
+    text-align: center;
+}
+
+.success-message {
+    color: black;
+    border: 1px solid darkgrey;
+    padding: 1px;
+    text-align: center;
+    justify-content: center;
+    font-size: 18px;
+}

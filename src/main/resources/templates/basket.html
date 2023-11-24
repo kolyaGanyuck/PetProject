@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Basket</title>
+    <link rel="stylesheet" type="text/css" href="/css/header.css">
+    <link rel="stylesheet" type="text/css" href="/css/footer.css">
+    <link rel="stylesheet" type="text/css" href="/css/basket.css">
+
+
+</head>
+<body>
+
+<div th:replace="header :: header"></div>
+
+<div th:each="product : ${products}" class="product-container">
+    <div class="product-image">
+        <div th:each="imageSrc : ${productImages.get(product.id)}">
+            <img th:src="${imageSrc}" alt="Product Image"/>
+        </div>
+    </div>
+    <div class="product-details">
+        <span  class="product-title-price" th:text="${product.getTitle()}
+         + ' ' + ${product.getPrice()} "   ></span>
+    </div>
+    <div class="clear"></div>
+</div>
+
+<div th:replace="footer :: footer"></div>
+</body>
+</html>

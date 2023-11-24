@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Creating advertisement</title>
+    <link rel="stylesheet" type="text/css" href="/css/header.css">
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+</head>
+<body>
+<div th:replace="header :: header"></div>
+<main>
+    <div class="formAdd">
+    <form
+
+            th:action="@{/add}" th:method="post" enctype="multipart/form-data">
+
+        <label for="title">Title: </label>
+        <input type="text" name="title" id="title">
+        <br>
+
+        <label for="power">Power: </label>
+        <input type="number" name="power" id="power">
+        <br>
+
+        <label for="description">Description: </label>
+        <input type="text" name="description" id="description">
+        <br>
+
+        <label for="author">Author: </label>
+        <input type="text" name="author" id="author">
+        <br>
+
+        <label for="maxSpeed">Max Speed:</label>
+        <input type="number" name="maxSpeed" id="maxSpeed">
+        <br>
+
+        <label for="price">Price: </label>
+        <input type="number" name="price" id="price">
+
+        <br>
+
+        <input type="submit" value="Додати товар">
+        <div class="imdAdd">
+            <label for="file1">  </label>
+            <input type="file" name="file1" id="file1"><br>
+
+            <label for="file2"></label>
+            <input type="file" name="file2" id="file2"><br>
+
+            <label for="file3"> </label>
+            <input type="file" name="file3" id="file3"><br>
+        </div>
+    </form>
+    </div>
+</main>
+</body>
+</html>

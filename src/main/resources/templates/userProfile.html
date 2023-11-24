@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+    <link rel="stylesheet" type="text/css" href="/css/updateUser.css">
+    <link rel="stylesheet" type="text/css" href="/css/header.css">
+
+</head>
+<body>
+<div th:replace="header :: header"></div>
+
+<form th:object="${user}" method="post" action="updateUserInfo">
+    <div class="form-group">
+
+
+        <input type="hidden"  th:field="*{id}" th:value="${user.id}">
+
+        <input type="hidden" th:field="*{username}" th:value="${user.username}">
+        <br>
+
+        <label for="fullname"> Fullname: </label>
+        <input type="text" id="fullname" th:field="*{fullname}" th:value="${user.fullname}"
+               placeholder="Enter new fullname">
+        <br>
+
+        <label for="phoneNumber"> Phone number: </label>
+        <input type="text" id="phoneNumber" th:field="*{phoneNumber}" th:value="${user.phoneNumber}"
+               placeholder="Enter new Phone number">
+        <br>
+
+        <label for="city"> City: </label>
+        <input type="text" id="city" th:field="*{city}" th:value="${user.city}" placeholder="Enter new city">
+        <br>
+
+        <input type="submit" value="Оновити мої дані">
+
+    </div>
+
+
+</form>
+
+
+</body>
+</html>

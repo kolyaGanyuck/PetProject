@@ -1,0 +1,49 @@
+/* Стилізація контейнера форми */
+.formAdd {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f7f7f7;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Стилізація заголовка форми */
+.formAdd h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Стилізація лейблів */
+.formAdd label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+/* Стилізація текстових полів та числових полів */
+.formAdd input[type="text"],
+.formAdd input[type="number"],
+.formAdd input[type="file"] {
+    width: 95%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+/* Стилізація кнопки "Додати товар" */
+.formAdd input[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+/* Зміна стилю кнопки при наведенні курсора */
+.formAdd input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+    <link rel="stylesheet" type="text/css" href="/css/header.css">
+    <link rel="stylesheet" type="text/css" href="/css/userList.css">
+</head>
+
+<body>
+<div th:replace="header :: header"></div>
+<table border="1">
+    <tr>
+        <th>Username</th>
+        <th>City</th>
+        <th>Phone number</th>
+        <th>Role</th>
+        <th>Ban</th>
+        <th>Active</th>
+    </tr>
+    <div th:each="user : ${users}" class="users">
+        <tr>
+            <td th:text="${user.getUsername()}"></td>
+            <td th:text="${user.getCity()}"></td>
+            <td th:text="${user.getPhoneNumber()}"></td>
+
+            <td>
+                <div th:each="role : ${user.roles}" class="no-wrap">
+                    <b th:text="${role.name}"></b>
+                </div>
+            </td>
+            <td>
+            <div>
+                <form
+                    method="post"
+                    th:action="@{/admin/ban/{id} (id = ${user.getId()} )}">
+                <input type="submit" value="BAN">
+                </form>
+            </div></td>
+            <td>
+                <span th:if="${user.isActive() == true}">Active</span>
+                <span th:if="${user.isActive() == false}">Inactive</span>
+            </td>
+        </tr>
+    </div>
+</table>
+</body>
+</html>

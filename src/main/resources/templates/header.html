@@ -1,0 +1,72 @@
+<header>
+
+    <div class="top-menu">
+        <a class="logo" href="/">Motosalon</a>
+        <ul class="menu">
+            <li><a href="#"><i class="fa-solid fa-bars"></i> Каталог товарів</a>
+
+                <ul class="submenu">
+                    <li>
+                        <a href="#">Мотоцикли</a>
+                        <ul class="rightmenu">
+                            <li><a href="#">
+                                <div class="img"><img class="img-box"
+                                                      src="https://spark-moto.com/image/cache/catalog/motorcycle/sp125c-4c/sp125c-4c-bordo-1000x1000.jpg">
+                                </div>
+                                Дорожний</a></li>
+                            <li><a href="#">
+                                <div class="img"><img class="img-box"
+                                                      src="https://topmoto.pro/img/types/sportbike/sport-1.png">
+                                </div>
+                                Спорт</a></li>
+                            <li><a href="#">
+                                <div class="img"><img class="img-box"
+                                                      src="https://mototek.com.ua/components/com_jshopping/files/img_products/thumb_VOGE_300DS__Loncin_LX300-6D_DS6___4_.jpg">
+                                </div>
+                                Турист</a></li>
+                            <li><a href="#">
+                                <div class="img"><img class="img-box"
+                                                      src="https://geon.ua/wp-content/uploads/2017/09/GEON-X-Ride-Cross-150.jpg">
+                                </div>
+                                Пітбайк</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a href="#">Скутери, мопеди</a>
+                        <ul class="rightmenu">
+                            <li><a href="bySkuter">
+                                <div class="img"><img class="img-box"
+                                                      src="https://mototek.com.ua/components/com_jshopping/files/img_products/thumb_suzuki-address-v50__1_.jpg">
+                                </div>
+                                Скутери Б/У</a></li>
+                            <li><a href="bySkuter">
+                                <div class="img"><img class="img-box"
+                                                      src="https://mototek.com.ua/components/com_jshopping/files/img_products/thumb_honda-dio-af68__3_.jpeg">
+                                </div>
+                                Скутери 49,9сс</a></li>
+                            <li><a href="#">
+                                <div class="img"><img class="img-box"
+                                                      src="https://mototek.com.ua/previev.php?src=https://mototek.com.ua/components/com_jshopping/files/img_products/full_Sym_Symphony_SR_150_preview.jpg&w=531&h=403">
+                                </div>
+                                Скутери 125-200сс</a></li>
+                            <li><a href="#">
+                                <div class="img"><img class="img-box"
+                                                      src="https://mototek.com.ua/components/com_jshopping/files/img_products/thumb_suzuki-skywave-400__1_.jpg">
+                                </div>
+                                Скутери 250-500сс</a></li>
+                        </ul>
+                    </li>
+                    <li><a> Квадроцикли</a></li>
+                    <li><a href="#">Електро-мотоцикли</a></li>
+                    <li><a href="#">Екіпіровка</a></li>
+                </ul>
+            </li>
+            <li><a href="#"><i class="fa-solid fa-tags"></i> Акції</a></li>
+            <li><a href="#"><i class="fa-brands fa-blogger-b"></i> Блог</a></li>
+            <li th:if="${key}"><a href="/userProfile"><i class="fa-solid fa-right-to-bracket"></i> Профіль</a></li>
+            <li th:unless="${key}"><a href="/login"><i class="fa-solid fa-right-to-bracket"></i> Вхід</a></li>
+            <li><a href="/basket"> <i class="fa-solid fa-basket-shopping"></i></a></li>
+        </ul>
+    </div>
+
+</header>

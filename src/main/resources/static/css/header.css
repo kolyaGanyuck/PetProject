@@ -1,0 +1,175 @@
+@import url('https://fonts.googleapis.com/css2?family=Lobster&family=Rubik+Puddles&family=Suez+One&display=swap');
+body{
+    background-color: beige;}
+
+.menu {
+    text-align: center;
+    justify-content: center;
+
+}
+
+.top-menu{
+    display: flex;
+
+}
+.logo {
+    height: 40px;
+    padding: 10px;
+    margin-right: 20px;
+    font-size: 30px;
+    font-family: 'Suez One', serif;
+    text-decoration: none;
+    color: black;
+
+}
+
+.logo:hover{
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    transition: all 0.1s ease;
+}
+.top{
+    justify-content: space-between;
+}
+
+.menu > li {
+    display: inline-block;
+    position: relative;
+    margin: 0px 30px 0 0;
+    padding: 7px;
+    font-size: 20px;
+    color: #454547;
+    text-decoration: none;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-radius: 5%;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2), 0 16px 20px rgba(0,0,0,0.2);
+}
+
+.menu li a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+
+}
+
+
+/* Подменю */
+.submenu {
+    display: none;
+    position: absolute;
+    top: 60px;
+    left: -42px;
+    background-color: beige;
+    margin-top: 5px;
+}
+
+.menu li:hover .submenu {
+    display: grid;
+    background-color: beige;
+    transition: all 0.5s ease;
+}
+
+.menu li:hover {
+    color: white;
+    background-color: #848f91;
+    cursor: pointer;
+    color: white;
+}
+
+
+.submenu li:hover{
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2), 0 16px 20px rgba(0,0,0,0.2);
+}
+
+.submenu li {
+    display: inline-block;
+    padding: 10px;
+    font-size: 20px;
+    color: #454547;
+    text-decoration: none;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-radius: 5%;
+    transition: all 0.3s ease;
+    background-color: beige;
+}
+
+.submenu li a {
+    padding: 10px;
+    white-space: nowrap;
+}
+
+/* Подменю, которое должно выпадать горизонтально */
+.submenu li ul.rightmenu {
+    display: none;
+    position: absolute;
+    margin-top: -45px;
+    left: 100%;
+    background-color: beige;
+    padding: 0;
+
+}
+
+.submenu li:hover ul.rightmenu {
+    display: flex;
+}
+img {
+    width: auto;
+    height: 100px;
+}
+
+.rightmenu *{
+    background-color: white;
+    padding: 0;
+}
+.rightmenu > li{
+    text-align: center;
+    margin-right: 10px;
+}
+
+.submenu > li{
+    margin-top: 10px
+
+}
+
+.rightmenu > li:first-child{
+    margin-left: 10px}
+
+
+.menu > li:hover {
+    box-shadow: 5px -5px dimgrey;
+    transition: all 0.3s ease;
+}
+
+.back-img{
+    position: absolute;
+    bottom: 10%;
+    right: 10%;
+    width: 400px;
+    height: auto;
+    background-size: 400px;
+}
+
+.postHeader{
+    display: flex;
+    justify-content: space-between;
+}
+.create-add, .filter{
+    font-size: 20px;
+
+    text-decoration: none;
+    font-family: sans-serif;
+    width: auto;
+    background-color: beige;
+    height: auto;
+    margin: 20px;
+
+}
+.create-add a, .filter a{
+    text-decoration: none;
+    color: black;
+
+}
+main {
+    z-index: 999999;
+}
