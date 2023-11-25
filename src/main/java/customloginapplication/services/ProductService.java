@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 
 @org.springframework.stereotype.Service
 @Slf4j
@@ -73,6 +73,22 @@ public class ProductService {
     image.setSize(file.getSize());
     image.setBytes(file.getBytes());
     return image;
+
+    }
+    public HashMap<Long, List<String>> resolveProducts(List<Product> products) {
+        Map<Long, List<String>> productImages = new HashMap<>();
+        for (Product product : products) {
+            List<String> imageStrings = new ArrayList<>();
+            if (!product.getImages().isEmpty()) {
+                Image firstImage = product.getImages().get(0);
+                String imageString = Base64.getEncoder().encodeToString(firstImage.getBytes());
+                imageStrings.add("data:image/jpeg;base64, " + imageString);
+            } else {
+                return null;
+            }
+            productImages.put(product.getId(), imageStrings);
+        }
+        return (HashMap<Long, List<String>>) productImages;
 
     }
 }

@@ -2,12 +2,10 @@ package customloginapplication.controllers;
 
 import customloginapplication.dto.AuthRequest;
 import customloginapplication.dto.UserDto;
-import customloginapplication.models.Image;
 import customloginapplication.models.Order;
 import customloginapplication.models.Product;
 import customloginapplication.models.User;
 import customloginapplication.services.*;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -32,6 +31,8 @@ import java.util.stream.Collectors;
 @Slf4j
 @Controller
 public class UserController {
+    @Autowired
+    private final CookieService cookieService;
     private final OrderService orderService;
     @Autowired
     private final ProductService productService;
@@ -44,7 +45,8 @@ public class UserController {
     private UserService userService;
 
 
-    public UserController(OrderService orderService, ProductService productService, UserDetailService userDetailsService, UserService userService) {
+    public UserController(CookieService cookieService, OrderService orderService, ProductService productService, UserDetailService userDetailsService, UserService userService) {
+        this.cookieService = cookieService;
         this.orderService = orderService;
         this.productService = productService;
         this.userDetailsService = userDetailsService;
@@ -53,27 +55,23 @@ public class UserController {
 
 
     @PostMapping("/authenticate")
-    public String auth(@RequestParam("username") String username, @RequestParam("password") String password, Model model, HttpServletResponse response) {
+    public String auth(@RequestParam("username") String username, RedirectAttributes redirectAttributes, @RequestParam("password") String password, Model model, HttpServletResponse response) {
         AuthRequest authRequest = new AuthRequest(password, username);
         List<String> userRoles = userDetailsService.getUserRolesByUsername(username);
         try {
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
             if (authentication.isAuthenticated()) {
                 String token = jwtService.generateToken(authRequest.getUsername(), userRoles);
-                response.addCookie(createCookie("jwtToken", token));
-                response.addCookie(createCookie("authenticated", "true"));
+                response.addCookie(cookieService.createCookie("jwtToken", token));
+                response.addCookie(cookieService.createCookie("authenticated", "true"));
                 model.addAttribute("key", true);
                 log.info("User {} is authenticated", username);
                 return "redirect:/";
             } else {
-
-                model.addAttribute("error", "Invalid Username or password");
                 return "register";
             }
         } catch (AuthenticationException e) {
             log.info("Invalid Username or password for user {}", username);
-            model.addAttribute("error", "Invalid Username or password");
-
             throw new UsernameNotFoundException("Invalid user request!");
         }
     }
@@ -82,8 +80,8 @@ public class UserController {
     @GetMapping("/")
     public String mainPage(HttpServletRequest request, Model model) {
         List<Product> products = productService.getProducts();
-        Map<Long, List<String>> productImages = resolveProducts(products);
-        handleAuthenticatedUser(model, request);
+        Map<Long, List<String>> productImages = productService.resolveProducts(products);
+        userDetailsService.handleAuthenticatedUser(model, request);
         model.addAttribute("productImages", productImages);
         model.addAttribute("products", products);
         return "mainPage";
@@ -93,7 +91,7 @@ public class UserController {
     @GetMapping("/userProfile")
     public String userProfile(Principal principal, Model model, HttpServletRequest request) {
         if (principal != null) {
-            handleAuthenticatedUser(model, request);
+            userDetailsService.handleAuthenticatedUser(model, request);
             User user = userDetailsService.findByUsername(principal.getName());
             model.addAttribute("user", user);
             return "userProfile";
@@ -107,15 +105,15 @@ public class UserController {
         List<String> userRoles = userDetailsService.getUserRolesByUsername(user.getUsername());
         userDetailsService.updateUserById(user);
         String token = jwtService.generateToken(user.getUsername(), userRoles);
-        response.addCookie(createCookie("jwtToken", token));
+        response.addCookie(cookieService.createCookie("jwtToken", token));
         return "redirect:/userProfile";
     }
 
     @GetMapping("/bySkuter")
     public String BySkuter(Model model, HttpServletRequest request) {
-        handleAuthenticatedUser(model, request);
+        userDetailsService.handleAuthenticatedUser(model, request);
         List<Product> products = productService.getProducts();
-        Map<Long, List<String>> productImages = resolveProducts(products);
+        Map<Long, List<String>> productImages = productService.resolveProducts(products);
         model.addAttribute("productImages", productImages);
         model.addAttribute("products", products);
         return "bySkuter";
@@ -133,13 +131,13 @@ public class UserController {
     @GetMapping("/createAdd")
     public String getProducts(Model model, HttpServletRequest request) {
         model.addAttribute("products", productService.getProducts());
-        handleAuthenticatedUser(model, request);
+        userDetailsService.handleAuthenticatedUser(model, request);
         return "formForCreateAdd";
     }
 
     @GetMapping("/product/{id}")
     public String findById(@PathVariable("id") Long id, Model model, HttpServletRequest request) {
-        handleAuthenticatedUser(model, request);
+        userDetailsService.handleAuthenticatedUser(model, request);
         Product product = productService.findById(id);
 
         model.addAttribute("product", product);
@@ -173,7 +171,7 @@ public class UserController {
     @GetMapping("/buyproduct/{id}")
     public String addToBasket(@PathVariable("id") Long id, HttpServletRequest request, Model model) {
         try {
-            String token = extractUsernameFromToken(request);
+            String token = cookieService.extractUsernameFromToken(request);
             String username = jwtService.extractUsername(token);
             User user = userDetailsService.findByUsername(username);
             Product product = productService.findById(id);
@@ -190,7 +188,7 @@ public class UserController {
     @GetMapping("/basket")
     public String basket(HttpServletRequest request, Model model) {
         try {
-            String token = extractUsernameFromToken(request);
+            String token = cookieService.extractUsernameFromToken(request);
             String username = jwtService.extractUsername(token);
             User user = userDetailsService.findByUsername(username);
             List<Order> ordersOfUser = orderService.findOrderByUserId(user.getId());
@@ -199,10 +197,10 @@ public class UserController {
                     .map(Order::getProductId)
                     .collect(Collectors.toList());
             List<Product> productsOfUser = productService.findProductsByIds(productIds);
-            Map<Long, List<String>> productImages = resolveProducts(productsOfUser);
+            Map<Long, List<String>> productImages = productService.resolveProducts(productsOfUser);
             model.addAttribute("productImages", productImages);
             model.addAttribute("products", productsOfUser);
-            handleAuthenticatedUser(model, request);
+            userDetailsService.handleAuthenticatedUser(model, request);
             model.addAttribute("orders", ordersOfUser);
             return "basket";
         } catch (Exception e) {
@@ -211,71 +209,49 @@ public class UserController {
     }
 
 
-    private String extractUsernameFromToken(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("jwtToken".equals(cookie.getName())) {
-                    String token = cookie.getValue();
-                    log.info("{}", token);
-                    return token;
-                }
-            }
-        }
-        // Куки "jwtToken" не знайдено, можна викинути виключення або повернути певне значення за замовчуванням
-        throw new NullPointerException("Куки 'jwtToken' не знайдено");
-        // або можна повернути null або інше значення за замовчуванням, залежно від вашого випадку використання
-        // return null;
-    }
-
-    private HashMap<Long, List<String>> resolveProducts(List<Product> products) {
-        Map<Long, List<String>> productImages = new HashMap<>();
-
-        for (Product product : products) {
-            List<String> imageStrings = new ArrayList<>();
-            if (!product.getImages().isEmpty()) {
-                Image firstImage = product.getImages().get(0);
-                String imageString = Base64.getEncoder().encodeToString(firstImage.getBytes());
-                imageStrings.add("data:image/jpeg;base64, " + imageString);
-            } else {
-                return null;
-            }
-            productImages.put(product.getId(), imageStrings);
-        }
-        return (HashMap<Long, List<String>>) productImages;
-
-    }
-
-
-    private Cookie createCookie(String name, String value) {
-        Cookie cookie = new Cookie(name, value);
-        cookie.setMaxAge(60 * 30);
-        return cookie;
-    }
-
-    private void handleAuthenticatedUser(Model model, HttpServletRequest request) {
-        String auth = userDetailsService.getAuthenticatedValueFromCookie(request);
-        boolean isAuthenticated = "true".equals(auth);
-        model.addAttribute("key", isAuthenticated);
-    }
-
-    // проверка токена
-//    @GetMapping("/resource1")
-//    public String getResource1(HttpServletRequest request, Model model) {
+//    private String extractUsernameFromToken(HttpServletRequest request) {
 //        Cookie[] cookies = request.getCookies();
 //        if (cookies != null) {
 //            for (Cookie cookie : cookies) {
-//                if (cookie.getName().equals("jwtToken")) {
-//                    String jwtToken = cookie.getValue();
-//                    model.addAttribute("token", jwtToken);
-//
-//                    break;
+//                if ("jwtToken".equals(cookie.getName())) {
+//                    String token = cookie.getValue();
+//                    log.info("{}", token);
+//                    return token;
 //                }
 //            }
 //        }
-//        return "resource1";
+//        throw new NullPointerException("Куки 'jwtToken' не знайдено");
 //    }
 
+//    public HashMap<Long, List<String>> resolveProducts(List<Product> products) {
+//        Map<Long, List<String>> productImages = new HashMap<>();
+//        for (Product product : products) {
+//            List<String> imageStrings = new ArrayList<>();
+//            if (!product.getImages().isEmpty()) {
+//                Image firstImage = product.getImages().get(0);
+//                String imageString = Base64.getEncoder().encodeToString(firstImage.getBytes());
+//                imageStrings.add("data:image/jpeg;base64, " + imageString);
+//            } else {
+//                return null;
+//            }
+//            productImages.put(product.getId(), imageStrings);
+//        }
+//        return (HashMap<Long, List<String>>) productImages;
+//
+//    }
+
+
+//    private Cookie createCookie(String name, String value) {
+//        Cookie cookie = new Cookie(name, value);
+//        cookie.setMaxAge(60 * 30);
+//        return cookie;
+//    }
+
+//    private void handleAuthenticatedUser(Model model, HttpServletRequest request) {
+//        String auth = userDetailsService.getAuthenticatedValueFromCookie(request);
+//        boolean isAuthenticated = "true".equals(auth);
+//        model.addAttribute("key", isAuthenticated);
+//    }
 
 }
 

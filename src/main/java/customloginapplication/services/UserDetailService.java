@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import customloginapplication.models.User;
 import customloginapplication.repositories.UserRepository;
+import org.springframework.ui.Model;
 
 @Service
 @Slf4j
@@ -28,6 +29,8 @@ public class UserDetailService implements UserDetailsService {
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -50,8 +53,6 @@ public class UserDetailService implements UserDetailsService {
                 authorities(),
                 user.getFullname());
     }
-
-
     public List<String> getUserRolesByUsername(String username) {
         User user = userRepository.findByUsername(username);
         if (user != null) {
@@ -95,11 +96,20 @@ public class UserDetailService implements UserDetailsService {
             existingUser.setCity(user.getCity());
             existingUser.setPhoneNumber(user.getPhoneNumber());
             userRepository.save(existingUser);
-            log.info("Update information about user {}", user.getUsername() );
+            log.info("Update information about user {}", user.getUsername());
 
 
         }
     }
+
+
+
+    public void handleAuthenticatedUser(Model model, HttpServletRequest request) {
+        String auth = getAuthenticatedValueFromCookie(request);
+        boolean isAuthenticated = "true".equals(auth);
+        model.addAttribute("key", isAuthenticated);
+    }
+
 
 
     public Collection<? extends GrantedAuthority> authorities() {
