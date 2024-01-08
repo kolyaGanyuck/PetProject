@@ -34,3 +34,7 @@
 .buy-button:hover {
     background-color: #0056b3;
 }
+
+.buy-button{
+    margin-left: 20px;
+}

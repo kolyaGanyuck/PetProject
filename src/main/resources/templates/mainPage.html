@@ -28,9 +28,9 @@
         </div>
         <div class="product-info">
             <a th:href="'/product/' + ${product.id}" th:id="${'product-' + product.id}">
-                <p th:text="'Title: ' + ${product.title}"></p>
+                <p th:text=" ${product.title}"></p>
                 <p>
-                    <span th:text="'Price: ' + ${product.price} + ' $'" ></span>
+                    <span th:text=" ${product.price} + ' $'" ></span>
                     <a th:href="'/buyproduct/' + ${product.id}" class="buy-button">Купити</a>
                 </p>
 <!--                <p th:text="'Author: ' + ${product.author}"></p>-->

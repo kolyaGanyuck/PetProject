@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Lobster&family=Rubik+Puddles&family=Suez+One&display=swap');
-body{
-    background-color: beige;}
+
+body {
+    background-color: beige;
+}
 
 .menu {
     text-align: center;
@@ -8,10 +10,11 @@ body{
 
 }
 
-.top-menu{
+.top-menu {
     display: flex;
 
 }
+
 .logo {
     height: 40px;
     padding: 10px;
@@ -23,11 +26,12 @@ body{
 
 }
 
-.logo:hover{
+.logo:hover {
     border: 3px solid rgba(0, 0, 0, 0.1);
     transition: all 0.1s ease;
 }
-.top{
+
+.top {
     justify-content: space-between;
 }
 
@@ -42,7 +46,7 @@ body{
     border: 3px solid rgba(0, 0, 0, 0.1);
     border-radius: 5%;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2), 0 16px 20px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 16px 20px rgba(0, 0, 0, 0.2);
 }
 
 .menu li a {
@@ -59,9 +63,10 @@ body{
     display: none;
     position: absolute;
     top: 60px;
-    left: -42px;
+    left: 0;
     background-color: beige;
     margin-top: 5px;
+    padding: 0;
 }
 
 .menu li:hover .submenu {
@@ -78,8 +83,8 @@ body{
 }
 
 
-.submenu li:hover{
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2), 0 16px 20px rgba(0,0,0,0.2);
+.submenu li:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 16px 20px rgba(0, 0, 0, 0.2);
 }
 
 .submenu li {
@@ -113,27 +118,30 @@ body{
 .submenu li:hover ul.rightmenu {
     display: flex;
 }
+
 img {
     width: auto;
     height: 100px;
 }
 
-.rightmenu *{
+.rightmenu * {
     background-color: white;
     padding: 0;
 }
-.rightmenu > li{
+
+.rightmenu > li {
     text-align: center;
     margin-right: 10px;
 }
 
-.submenu > li{
+.submenu > li {
     margin-top: 10px
 
 }
 
-.rightmenu > li:first-child{
-    margin-left: 10px}
+.rightmenu > li:first-child {
+    margin-left: 10px
+}
 
 
 .menu > li:hover {
@@ -141,7 +149,7 @@ img {
     transition: all 0.3s ease;
 }
 
-.back-img{
+.back-img {
     position: absolute;
     bottom: 10%;
     right: 10%;
@@ -150,11 +158,12 @@ img {
     background-size: 400px;
 }
 
-.postHeader{
+.postHeader {
     display: flex;
     justify-content: space-between;
 }
-.create-add, .filter{
+
+.create-add, .filter {
     font-size: 20px;
 
     text-decoration: none;
@@ -165,11 +174,13 @@ img {
     margin: 20px;
 
 }
-.create-add a, .filter a{
+
+.create-add a, .filter a {
     text-decoration: none;
     color: black;
 
 }
+
 main {
     z-index: 999999;
 }

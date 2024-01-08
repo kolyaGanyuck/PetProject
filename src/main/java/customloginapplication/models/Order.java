@@ -31,7 +31,6 @@ public class Order {
         count = 1;
     }
 
-
     @PrePersist
     private void init() {
         dataOfCreated = LocalDateTime.now();

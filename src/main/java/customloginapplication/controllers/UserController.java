@@ -177,6 +177,7 @@ public class UserController {
             Product product = productService.findById(id);
             Order order = new Order(product.getId(), user.getId(), LocalDateTime.now(), product.getPrice());
 
+
             orderService.save(order);
             log.info("save order {}", order);
         } catch (NullPointerException exception) {
@@ -192,7 +193,6 @@ public class UserController {
             String username = jwtService.extractUsername(token);
             User user = userDetailsService.findByUsername(username);
             List<Order> ordersOfUser = orderService.findOrderByUserId(user.getId());
-
             List<Long> productIds = ordersOfUser.stream()
                     .map(Order::getProductId)
                     .collect(Collectors.toList());
@@ -203,55 +203,20 @@ public class UserController {
             userDetailsService.handleAuthenticatedUser(model, request);
             model.addAttribute("orders", ordersOfUser);
             return "basket";
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        }catch (NullPointerException exception) {
+                return "redirect:/login";
+            }
+    }
+    @PostMapping("/submit/{id}")
+    public String submitOrder(@PathVariable("id") Long id){
+        orderService.reserveOrder(id);
+        return "redirect:/basket";
     }
 
 
-//    private String extractUsernameFromToken(HttpServletRequest request) {
-//        Cookie[] cookies = request.getCookies();
-//        if (cookies != null) {
-//            for (Cookie cookie : cookies) {
-//                if ("jwtToken".equals(cookie.getName())) {
-//                    String token = cookie.getValue();
-//                    log.info("{}", token);
-//                    return token;
-//                }
-//            }
-//        }
-//        throw new NullPointerException("Куки 'jwtToken' не знайдено");
-//    }
-
-//    public HashMap<Long, List<String>> resolveProducts(List<Product> products) {
-//        Map<Long, List<String>> productImages = new HashMap<>();
-//        for (Product product : products) {
-//            List<String> imageStrings = new ArrayList<>();
-//            if (!product.getImages().isEmpty()) {
-//                Image firstImage = product.getImages().get(0);
-//                String imageString = Base64.getEncoder().encodeToString(firstImage.getBytes());
-//                imageStrings.add("data:image/jpeg;base64, " + imageString);
-//            } else {
-//                return null;
-//            }
-//            productImages.put(product.getId(), imageStrings);
-//        }
-//        return (HashMap<Long, List<String>>) productImages;
-//
-//    }
 
 
-//    private Cookie createCookie(String name, String value) {
-//        Cookie cookie = new Cookie(name, value);
-//        cookie.setMaxAge(60 * 30);
-//        return cookie;
-//    }
 
-//    private void handleAuthenticatedUser(Model model, HttpServletRequest request) {
-//        String auth = userDetailsService.getAuthenticatedValueFromCookie(request);
-//        boolean isAuthenticated = "true".equals(auth);
-//        model.addAttribute("key", isAuthenticated);
-//    }
 
 }
 
