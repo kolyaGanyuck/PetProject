@@ -7,6 +7,7 @@ body {
 .menu {
     text-align: center;
     justify-content: center;
+    padding-left: 15%;
 
 }
 
@@ -18,7 +19,7 @@ body {
 .logo {
     height: 40px;
     padding: 10px;
-    margin-right: 20px;
+    margin: 30px 10px 10px 20px;
     font-size: 30px;
     font-family: 'Suez One', serif;
     text-decoration: none;
