@@ -55,7 +55,7 @@ public class UserController {
 
 
     @PostMapping("/authenticate")
-    public String auth(@RequestParam("username") String username, RedirectAttributes redirectAttributes, @RequestParam("password") String password, Model model, HttpServletResponse response) {
+    public String auth(@RequestParam("username") String username, @RequestParam("password") String password, Model model, HttpServletResponse response) {
         AuthRequest authRequest = new AuthRequest(password, username);
         List<String> userRoles = userDetailsService.getUserRolesByUsername(username);
         try {
@@ -176,8 +176,6 @@ public class UserController {
             User user = userDetailsService.findByUsername(username);
             Product product = productService.findById(id);
             Order order = new Order(product.getId(), user.getId(), LocalDateTime.now(), product.getPrice());
-
-
             orderService.save(order);
             log.info("save order {}", order);
         } catch (NullPointerException exception) {
