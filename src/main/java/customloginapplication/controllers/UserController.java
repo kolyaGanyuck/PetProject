@@ -54,29 +54,6 @@ public class UserController {
     }
 
 
-    @PostMapping("/authenticate")
-    public String auth(@RequestParam("username") String username, @RequestParam("password") String password, Model model, HttpServletResponse response) {
-        AuthRequest authRequest = new AuthRequest(password, username);
-        List<String> userRoles = userDetailsService.getUserRolesByUsername(username);
-        try {
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
-            if (authentication.isAuthenticated()) {
-                String token = jwtService.generateToken(authRequest.getUsername(), userRoles);
-                response.addCookie(cookieService.createCookie("jwtToken", token));
-                response.addCookie(cookieService.createCookie("authenticated", "true"));
-                model.addAttribute("key", true);
-                log.info("User {} is authenticated", username);
-                return "redirect:/";
-            } else {
-                return "register";
-            }
-        } catch (AuthenticationException e) {
-            log.info("Invalid Username or password for user {}", username);
-            throw new UsernameNotFoundException("Invalid user request!");
-        }
-    }
-
-
     @GetMapping("/")
     public String mainPage(HttpServletRequest request, Model model) {
         List<Product> products = productService.getProducts();
@@ -145,28 +122,6 @@ public class UserController {
         return "productById";
     }
 
-    @GetMapping("/login")
-    public String login(Model model, UserDto userDto) {
-        model.addAttribute("user", userDto);
-        return "login";
-    }
-
-    @GetMapping("/register")
-    public String register(Model model, UserDto userDto) {
-        model.addAttribute("user", userDto);
-        return "register";
-    }
-
-    @PostMapping("/register")
-    public String registerSave(@ModelAttribute("user") UserDto userDto, Model model) {
-        User user = userService.findByUsername(userDto.getUsername());
-        if (user != null) {
-            model.addAttribute("userexist", user);
-            return "register";
-        }
-        userService.save(userDto);
-        return "redirect:/register?success";
-    }
 
     @GetMapping("/buyproduct/{id}")
     public String addToBasket(@PathVariable("id") Long id, HttpServletRequest request, Model model) {
