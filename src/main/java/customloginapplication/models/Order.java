@@ -27,8 +27,9 @@ public class Order {
     public Order(Long productId, Long userId, LocalDateTime now, int price) {
         this.productId = productId;
         this.userId = userId;
-        isReserved = false;
-        count = 1;
+        this.dataOfCreated = now;
+        this.isReserved = false;
+        this.count = 1;
     }
 
     @PrePersist

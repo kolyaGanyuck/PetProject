@@ -1,30 +1,21 @@
 package customloginapplication.controllers;
 
-import customloginapplication.dto.AuthRequest;
-import customloginapplication.dto.UserDto;
 import customloginapplication.models.Order;
 import customloginapplication.models.Product;
 import customloginapplication.models.User;
 import customloginapplication.services.*;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
-import java.security.Principal;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -40,9 +31,6 @@ public class UserController {
     private final UserDetailService userDetailsService;
     @Autowired
     private JwtService jwtService;
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    private UserService userService;
 
 
     public UserController(CookieService cookieService, OrderService orderService, ProductService productService, UserDetailService userDetailsService, UserService userService) {
@@ -50,7 +38,6 @@ public class UserController {
         this.orderService = orderService;
         this.productService = productService;
         this.userDetailsService = userDetailsService;
-        this.userService = userService;
     }
 
 
@@ -64,27 +51,28 @@ public class UserController {
         return "mainPage";
     }
 
-
-    @GetMapping("/userProfile")
-    public String userProfile(Principal principal, Model model, HttpServletRequest request) {
-        if (principal != null) {
-            userDetailsService.handleAuthenticatedUser(model, request);
-            User user = userDetailsService.findByUsername(principal.getName());
-            model.addAttribute("user", user);
-            return "userProfile";
-        } else {
-            return "redirect:/login";
-        }
-    }
-
-    @PostMapping("/updateUserInfo")
-    public String updateUserData(@ModelAttribute User user, HttpServletResponse response) {
-        List<String> userRoles = userDetailsService.getUserRolesByUsername(user.getUsername());
-        userDetailsService.updateUserById(user);
-        String token = jwtService.generateToken(user.getUsername(), userRoles);
-        response.addCookie(cookieService.createCookie("jwtToken", token));
-        return "redirect:/userProfile";
-    }
+    //1
+//    @GetMapping("/userProfile")
+//    public String userProfile(Principal principal, Model model, HttpServletRequest request) {
+//        if (principal != null) {
+//            userDetailsService.handleAuthenticatedUser(model, request);
+//            User user = userDetailsService.findByUsername(principal.getName());
+//            model.addAttribute("user", user);
+//            return "userProfile";
+//        } else {
+//            return "redirect:/login";
+//        }
+//    }
+//
+//    //2
+//    @PostMapping("/updateUserInfo")
+//    public String updateUserData(@ModelAttribute User user, HttpServletResponse response) {
+//        List<String> userRoles = userDetailsService.getUserRolesByUsername(user.getUsername());
+//        userDetailsService.updateUserById(user);
+//        String token = jwtService.generateToken(user.getUsername(), userRoles);
+//        response.addCookie(cookieService.createCookie("jwtToken", token));
+//        return "redirect:/userProfile";
+//    }
 
     @GetMapping("/bySkuter")
     public String BySkuter(Model model, HttpServletRequest request) {
@@ -156,20 +144,16 @@ public class UserController {
             userDetailsService.handleAuthenticatedUser(model, request);
             model.addAttribute("orders", ordersOfUser);
             return "basket";
-        }catch (NullPointerException exception) {
-                return "redirect:/login";
-            }
+        } catch (NullPointerException exception) {
+            return "redirect:/login";
+        }
     }
+
     @PostMapping("/submit/{id}")
-    public String submitOrder(@PathVariable("id") Long id){
+    public String submitOrder(@PathVariable("id") Long id) {
         orderService.reserveOrder(id);
         return "redirect:/basket";
     }
-
-
-
-
-
 
 }
 

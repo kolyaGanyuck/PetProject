@@ -9,6 +9,7 @@ import customloginapplication.services.UserDetailService;
 import customloginapplication.services.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -32,10 +33,10 @@ public class LoginController {
     private CookieService cookieService;
 
 
-
     private final UserDetailService userDetailsService;
     private JwtService jwtService;
 
+    @Autowired
     public LoginController(UserService userService, AuthenticationManager authenticationManager, CookieService cookieService, UserDetailService userDetailsService, JwtService jwtService) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
@@ -44,15 +45,12 @@ public class LoginController {
         this.jwtService = jwtService;
     }
 
-
-    //3
     @GetMapping("/register")
     public String register(Model model, UserDto userDto) {
         model.addAttribute("user", userDto);
         return "register";
     }
 
-    //4
     @PostMapping("/register")
     public String registerSave(@ModelAttribute("user") UserDto userDto, Model model) {
         User user = userService.findByUsername(userDto.getUsername());
@@ -64,7 +62,6 @@ public class LoginController {
         return "redirect:/register?success";
     }
 
-    //2
     @GetMapping("/login")
     public String login(Model model, UserDto userDto) {
         model.addAttribute("user", userDto);
