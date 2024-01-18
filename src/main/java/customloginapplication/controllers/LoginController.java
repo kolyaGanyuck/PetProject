@@ -59,6 +59,7 @@ public class LoginController {
             return "register";
         }
         userService.save(userDto);
+        log.info("User {} authenticated" , userDto.getUsername());
         return "redirect:/register?success";
     }
 

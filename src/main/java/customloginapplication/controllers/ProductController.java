@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
-public class UserController {
+public class ProductController {
     @Autowired
     private final CookieService cookieService;
     private final OrderService orderService;
@@ -33,7 +33,7 @@ public class UserController {
     private JwtService jwtService;
 
 
-    public UserController(CookieService cookieService, OrderService orderService, ProductService productService, UserDetailService userDetailsService, UserService userService) {
+    public ProductController(CookieService cookieService, OrderService orderService, ProductService productService, UserDetailService userDetailsService, UserService userService) {
         this.cookieService = cookieService;
         this.orderService = orderService;
         this.productService = productService;
@@ -51,28 +51,6 @@ public class UserController {
         return "mainPage";
     }
 
-    //1
-//    @GetMapping("/userProfile")
-//    public String userProfile(Principal principal, Model model, HttpServletRequest request) {
-//        if (principal != null) {
-//            userDetailsService.handleAuthenticatedUser(model, request);
-//            User user = userDetailsService.findByUsername(principal.getName());
-//            model.addAttribute("user", user);
-//            return "userProfile";
-//        } else {
-//            return "redirect:/login";
-//        }
-//    }
-//
-//    //2
-//    @PostMapping("/updateUserInfo")
-//    public String updateUserData(@ModelAttribute User user, HttpServletResponse response) {
-//        List<String> userRoles = userDetailsService.getUserRolesByUsername(user.getUsername());
-//        userDetailsService.updateUserById(user);
-//        String token = jwtService.generateToken(user.getUsername(), userRoles);
-//        response.addCookie(cookieService.createCookie("jwtToken", token));
-//        return "redirect:/userProfile";
-//    }
 
     @GetMapping("/bySkuter")
     public String BySkuter(Model model, HttpServletRequest request) {
@@ -90,6 +68,7 @@ public class UserController {
                       @RequestParam(value = "file3") MultipartFile file3,
                       @ModelAttribute Product product) throws IOException {
         productService.saveProduct(product, file1, file2, file3);
+        log.info("Товар {} доданий", product.getTitle());
         return "redirect:/";
     }
 
@@ -104,7 +83,6 @@ public class UserController {
     public String findById(@PathVariable("id") Long id, Model model, HttpServletRequest request) {
         userDetailsService.handleAuthenticatedUser(model, request);
         Product product = productService.findById(id);
-
         model.addAttribute("product", product);
         model.addAttribute("images", product.getImages());
         return "productById";
@@ -120,7 +98,7 @@ public class UserController {
             Product product = productService.findById(id);
             Order order = new Order(product.getId(), user.getId(), LocalDateTime.now(), product.getPrice());
             orderService.save(order);
-            log.info("save order {}", order);
+            log.info("Order {} have saved", order);
         } catch (NullPointerException exception) {
             return "redirect:/login";
         }
@@ -152,6 +130,7 @@ public class UserController {
     @PostMapping("/submit/{id}")
     public String submitOrder(@PathVariable("id") Long id) {
         orderService.reserveOrder(id);
+        log.info("Product reserved");
         return "redirect:/basket";
     }
 
